@@ -1,0 +1,172 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+body {
+    background: #cfe4df;
+}
+
+header {
+    background: #0b0b55;
+    color: white;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 17px 60px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    width: 200px;
+    height: 55px;
+    gap: 12px;
+    text-decoration: none;
+    color: white;
+}
+
+.logo-icon {
+    background: rgba(255, 255, 255, 0.15);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.logo-text{
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.logo-text h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.logo-text span{
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+main {
+    text-align: center;
+    padding: 60px 40px;
+}
+
+.icon {
+    width: 120px;
+    height: 120px;
+    background: white;
+    margin: 0 auto 30px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+ font-size: 25px;
+ font-weight: 700;
+ color: #0b0b55;
+}
+
+.subtítulo {
+  margin-top: 10px;
+  color: #4b5563;
+  font-size: 16px;
+}
+
+.cards {
+    margin-top: 60px;
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    width: 280px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    border-color: #044672;
+}
+
+.icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    color: white;
+}
+
+.verde {
+    background: #2bb673;
+
+}
+
+.laranja {
+    background: #f58220;
+}
+
+.gráfico {
+    background: #1abc9c;
+}
+
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #1f2937;
+}
+
+.card p{
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.date {
+    font-size: 14px;
+    margin-left: auto;
+
+}
+
+.logo-topo{
+    width: 300px;
+    margin-bottom: 20px;
+}
