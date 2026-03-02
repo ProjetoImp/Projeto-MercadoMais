@@ -141,6 +141,11 @@ body {
     padding: 0.6rem 1.25rem;
     border-radius: 0.75rem;
     cursor: pointer;
+    box-shadow: 0 0px 2px 0px rgb(119, 119, 119);
+}
+
+.btn-outline:hover {
+    background: #e4e0ff;
 }
 
 /* Tabela */
@@ -161,7 +166,7 @@ body {
 .modal {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.5);
+    background: #cfe4df;
     display: none; 
     align-items: center;
     justify-content: center;
@@ -170,7 +175,7 @@ body {
 }
 
 .modal-content {
-    background: var(--white);
+    background: #f5f5ff;
     width: 100%;
     max-width: 500px;
     border-radius: 1rem;
@@ -178,16 +183,17 @@ body {
 }
 
 .modal-header {
-    padding: 1.5rem;
-    background: #f8fafc;
+    padding: 1.0rem;
+    background: #e8e8ff;
     display: flex;
+    font-weight: bold;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
 }
 
 .modal-body {
-    padding: 1.5rem;
+    padding: 1.0rem;
 }
 
 .form-grid {
@@ -214,6 +220,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 0.5rem;
     outline: none;
+    box-shadow: 0 0px 1px 0px rgb(107, 107, 107);
 }
 
 .form-actions {
