@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  mysql-test:
+    image: mysql:8.1
+    container_name: mysql_test
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: supermercado
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user123
+    ports:
+      - "3307:3306"   # mapeia a porta do host para a do container
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: always
+
+volumes:
+  mysql_data:
