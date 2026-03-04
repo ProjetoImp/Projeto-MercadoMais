@@ -7,145 +7,146 @@
     <title>Mercado+ | Gerenciador de Produtos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+          rel="stylesheet">
     <link rel="stylesheet" href="../css/products.css">
 </head>
 
 <body>
-    <!-- HEADER -->
-    <div id="app" class="wrapper">
-        <header class="main-header">
-            <div class="container header-content">
-                <a href="./index.html" class="logo-area">
-                    <div class="logo-icon">
-                        📦
-                    </div>
-                    <img src="../imgs/logo-claro.png" alt="Logo Mercado+">
-                </a>
-                <a href="./index.html" class="back-link">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-                    </svg>
-                    Voltar
-                </a>
-            </div>
-        </header>
-
-        <main class="container main-content">
-            <div class="page-header">
-                <h1>Gerenciador de Produtos</h1>
-            </div>
-
-            <!-- CAIXA DE BUSCA PRODUTO -->
-            <div class="toolbar">
-                <div class="search-box">
-                    <input type="text" id="search-input" placeholder="Buscar produtos...">
+<!-- HEADER -->
+<div id="app" class="wrapper">
+    <header class="main-header">
+        <div class="container header-content">
+            <a href="../../index.html" class="logo-area">
+                <div class="logo-icon">
+                    📦
                 </div>
-                <!-- BOTÃO DE CADASTRO DE PRODUTO -->
-                <button id="btn-add-product" class="btn-primary">+ Novo Produto</button>
-            </div>
+                <img src="../imgs/logo-claro.png" alt="Logo Mercado+">
+            </a>
 
-            <!-- LISTAGEM DE PRODUTOS -->
-            <div class="table-container">
-                <table class="w-full">
-                    <thead class="bg-slate-50 border-b border-slate-200">
-                        <tr>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Cód.</th>
-                            <th type="date" class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">
-                                Data Cadastro</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Categoria</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Nome</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Descrição
-                            </th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Preço</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Estoque</th>
-                            <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Status</th>
-                            <!--Botão ações comentado-->
-                            <!--<th class="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase">Ações</th>-->
-                        </tr>
-                    </thead>
-                    <tbody id="products-table-body" class="divide-y divide-slate-100">
-                    </tbody>
-                </table>
-                <div id="empty-state" class="empty-msg hidden">Nenhum produto encontrado.</div>
-            </div>
-        </main>
-    </div>
-
-    <!-- MODAL DE CADASTRO DE PRODUTO -->
-    <div id="product-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modal-title">Novo Produto</h2>
-                <button onclick="closeModal()" class="close-btn">&times;</button>
-            </div>
-            <form id="product-form" class="modal-body">
-                <input type="hidden" id="edit-id">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Categoria </label>
-                        <select id="input-categoria" required>
-                            <option value="Alimentos">Alimentos</option>
-                            <option value="Bebidas">Bebidas</option>
-                            <option value="Limpeza">Limpeza</option>
-                            <option value="Perfumaria">Perfumaria</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Nome do Produto </label>
-                        <input type="text" id="input-nome" required>
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Descrição</label>
-                        <input type="text" id="input-descricao" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Preço (R$)</label>
-                        <input type="number" id="input-preco" required step="0.01">
-                    </div>
-                    <div class="form-group">
-                        <label>Estoque</label>
-                        <input type="number" id="input-estoque" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select id="input-status" required>
-                            <option value="Ativo">Ativo</option>
-                            <option value="Inativo">Inativo</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- BOTÕES CANCELAR E SALVAR DO MODAL -->
-                <div class="form-actions">
-                    <button type="button" onclick="closeModal()" class="btn-outline">Cancelar</button>
-                    <button type="submit" class="btn-primary">Salvar</button>
-                </div>
-            </form>
+            <a href="../../index.html" class="back-link">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Voltar
+            </a>
         </div>
-    </div>
+    </header>
 
-    <!-- MODAL DELETAR PRODUTO -->
-    <div id="delete-modal" class="modal">
-        <div class="modal-content" style="max-width: 400px; text-align: center; padding: 2rem;">
-            <h3>Excluir Produto?</h3>
-            <p>Esta ação não poderá ser desfeita.</p>
+    <main class="container main-content">
+        <div class="page-header">
+            <h1>Gerenciador de Produtos</h1>
+        </div>
+
+        <!-- CAIXA DE BUSCA PRODUTO -->
+        <div class="toolbar">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Buscar produtos...">
+            </div>
+            <!-- BOTÃO DE CADASTRO DE PRODUTO -->
+            <button id="btn-add-product" class="btn-primary">+ Novo Produto</button>
+        </div>
+
+        <!-- LISTAGEM DE PRODUTOS -->
+        <div class="table-container">
+            <table class="w-full">
+                <thead class="bg-slate-50 border-b border-slate-200">
+                <tr>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Cód.</th>
+                    <th type="date" class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">
+                        Data Cadastro</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Categoria</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Nome</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Descrição
+                    </th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Preço</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Estoque</th>
+                    <th class="px-6 py-4 text-left text-xs font-semibold text-slate-600 uppercase">Status</th>
+                    <!--Botão ações comentado-->
+                    <!--<th class="px-6 py-4 text-center text-xs font-semibold text-slate-600 uppercase">Ações</th>-->
+                </tr>
+                </thead>
+                <tbody id="products-table-body" class="divide-y divide-slate-100">
+                </tbody>
+            </table>
+            <div id="empty-state" class="empty-msg hidden">Nenhum produto encontrado.</div>
+        </div>
+    </main>
+</div>
+
+<!-- MODAL DE CADASTRO DE PRODUTO -->
+<div id="product-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modal-title">Novo Produto</h2>
+            <button onclick="closeModal()" class="close-btn">&times;</button>
+        </div>
+        <form id="product-form" class="modal-body">
+            <input type="hidden" id="edit-id">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Categoria </label>
+                    <select id="input-categoria" required>
+                        <option value="Alimentos">Alimentos</option>
+                        <option value="Bebidas">Bebidas</option>
+                        <option value="Limpeza">Limpeza</option>
+                        <option value="Perfumaria">Perfumaria</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Nome do Produto </label>
+                    <input type="text" id="input-nome" required placeholder="Nome">
+                </div>
+            </div>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Descrição</label>
+                    <input type="text" id="input-descricao" required placeholder="Descrição">
+                </div>
+                <div class="form-group">
+                    <label>Preço (R$)</label>
+                    <input type="text" id="input-preco" required placeholder="0,00">
+                </div>
+                <div class="form-group">
+                    <label>Estoque</label>
+                    <input type="text" id="input-estoque" required placeholder="0">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="input-status" required>
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- BOTÕES CANCELAR E SALVAR DO MODAL -->
             <div class="form-actions">
-                <button onclick="closeDeleteModal()" class="btn-outline">Cancelar</button>
-                <button id="confirm-delete-btn" class="btn-primary" style="background: #dc2626;">Sim,
-                    excluir</button>
+                <button type="button" onclick="closeModal()" class="btn-outline">Cancelar</button>
+                <button type="submit" class="btn-primary">Salvar</button>
             </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL DELETAR PRODUTO -->
+<div id="delete-modal" class="modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center; padding: 2rem;">
+        <h3>Excluir Produto?</h3>
+        <p>Esta ação não poderá ser desfeita.</p>
+        <div class="form-actions">
+            <button onclick="closeDeleteModal()" class="btn-outline">Cancelar</button>
+            <button id="confirm-delete-btn" class="btn-primary" style="background: #dc2626;">Sim,
+                excluir</button>
         </div>
     </div>
+</div>
 
-    <div id="toast" class="toast">
-        <span id="toast-message">Mensagem</span>
-    </div>
+<div id="toast" class="toast">
+    <span id="toast-message">Mensagem</span>
+</div>
 
-    <script src="./assets/js/products.js"></script>
+    <script src="../js/products.js"></script>
 </body>
 
 </html>

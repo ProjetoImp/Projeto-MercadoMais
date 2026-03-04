@@ -221,6 +221,19 @@ body {
     border-radius: 0.5rem;
     outline: none;
     box-shadow: 0 0px 1px 0px rgb(107, 107, 107);
+    font-size: 0.875rem;
+    height: 3rem;
+}
+
+.form-group select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1rem;
+    padding-right: 2.5rem;
+    height: 3rem; /* Altura maior para categoria e status */
 }
 
 .form-actions {
