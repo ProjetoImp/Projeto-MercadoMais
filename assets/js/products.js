@@ -1,3 +1,5 @@
+console.log("JS carregou");
+
 // Base de dados teste
 let allProducts = [
     { id: 1, codigo: 'PRD001', dataCadastro: '2026-01-15', categoria: 'Alimentos', nome: 'Arroz', descricao: "Camil", preco: 25.90, estoque: 50, statusProduto: "Ativo" },
@@ -79,8 +81,6 @@ function openModal(isEdit = false, id = null) {
         document.getElementById('modal-title').textContent = "Editar Produto";
         const p = allProducts.find(prod => prod.id === id);
         document.getElementById('edit-id').value = p.id;
-        document.getElementById('input-codigo').value = p.codigo;
-        document.getElementById('input-data').value = p.dataCadastro;
         document.getElementById('input-categoria').value = p.categoria;
         document.getElementById('input-nome').value = p.nome;
         document.getElementById('input-descricao').value = p.descricao;
