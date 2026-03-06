@@ -1,5 +1,8 @@
-const API_URL = "http://localhost:8080/produtos";       // endpoint do backend de produtos
-const CATEGORIAS_URL = "http://localhost:8080/categorias"; // endpoint do backend de categorias
+// const API_URL = "http://localhost:8080/produtos" //endpoint do backend de produtos (Local)
+// const CATEGORIAS_URL = "http://localhost:8080/categorias"; // endpoint do backend de categorias (Local)
+
+const API_URL = "https://teste-production-4a7a.up.railway.app/produtos";  // endpoint do backend de produtos (Railway)
+const CATEGORIAS_URL = "https://teste-production-4a7a.up.railway.app/categorias"; // endpoint do backend de categorias (Railway)
 
 let allProducts = [];
 let categorias = [];
