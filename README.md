@@ -57,7 +57,7 @@ Clique com o botão direito em src/main/java
 | Aluno | RA                        | LinkedIn                           |
 | ------ | -------------------------- | ----------------------------------- |
 | Arilson Filho   | 2401655        | https://www.linkedin.com/in/arilson-filadelfo/ |
-| Jean Lisboa    | 12345     |    https://        |
+| Jean Lisboa    | 2401572     |    https://www.linkedin.com/in/jean-lisboa-6372b8212/        |
 | Livia Santos    | 2401571       | https://www.linkedin.com/in/livia-graziele-b84b4a34a             |
 | Roberto Borges    | 12345                | https://      |
 | Thainá Ramos     | 12345            | https://    |
