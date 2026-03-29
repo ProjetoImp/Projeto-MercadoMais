@@ -13,6 +13,10 @@ a {
 
 body {
     background: #cfe4df;
+    /* Adicionamos um espaço no topo igual à altura do header 
+       para o conteúdo não ficar escondido atrás dele */
+    padding-top: 90px; 
+    margin: 0;
 }
 
 header {
@@ -22,6 +26,14 @@ header {
     justify-content: flex-start;
     align-items: center;
     padding: 17px 60px;
+    
+    /* CONFIGURAÇÃO PARA FICAR FIXO */
+    position: fixed;   /* Fixa na tela */
+    top: 0;            /* Cola no topo */
+    left: 0;           /* Cola na esquerda */
+    right: 0;          /* Cola na direita (garante 100% de largura) */
+    z-index: 1000;     /* Garante que fique acima de todos os outros elementos */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2); /* Sombra para dar profundidade */
 }
 
 .logo {

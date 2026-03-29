@@ -16,13 +16,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('btn-add-product').addEventListener('click', () => openModal(false));
     document.getElementById('search-input').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const filtered = allProducts.filter(p =>
-            p.nome.toLowerCase().includes(term) ||
-            p.codigo.toLowerCase().includes(term)
-        );
-        renderTable(filtered);
+    const term = e.target.value.toLowerCase().trim();
+    
+    const filtered = allProducts.filter(p => {
+        const nomeMatch = p.nome ? p.nome.toLowerCase().includes(term) : false;
+        const idMatch = p.id ? String(p.id).includes(term) : false;
+        const categoriaMatch = p.categoria?.nome ? p.categoria.nome.toLowerCase().includes(term) : false;
+        return nomeMatch || idMatch || categoriaMatch;
     });
+
+    renderTable(filtered);
+});
 
     document.getElementById('product-form').addEventListener('submit', handleFormSubmit);
     document.getElementById('confirm-delete-btn').addEventListener('click', confirmDelete);
@@ -105,6 +109,20 @@ function renderTable(products = allProducts) {
             <td class="px-6 py-4">R$ ${p.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</td>
             <td class="px-6 py-4 text-slate-800">${p.quantidadeEstoque} un</td>
             <td class="px-6 py-4">${p.ativo ? "Ativo" : "Inativo"}</td>
+            <td class="px-6 py-4 text-center">
+                <div class="flex justify-center gap-3">
+                    <button onclick="openModal(true, ${p.id})" class="text-blue-600 hover:text-blue-800 transition-colors" title="Editar">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                        </svg>
+                    </button>
+                    <button onclick="openDeleteModal(${p.id})" class="text-red-600 hover:text-red-800 transition-colors" title="Excluir">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                </div>
+            </td>
         `;
         tbody.appendChild(row);
     });
