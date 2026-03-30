@@ -1,6 +1,5 @@
 package com.example.supermercado.controller;
 
-
 import com.example.supermercado.entity.Produto;
 import com.example.supermercado.service.ProdutoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,7 @@ import java.util.List;
 @RequestMapping("/produtos")
 @CrossOrigin(origins = "*")
 public class ProdutoController {
+
 
     @Autowired
     private final ProdutoService produtoService;
@@ -41,6 +41,23 @@ public class ProdutoController {
     public ResponseEntity<?> buscarProduto(@PathVariable Long id) {
         Produto produto = produtoService.buscarPorId(id);
         return ResponseEntity.ok(produto);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Produto> atualizarProduto(@PathVariable Long id, @RequestBody Produto produto) {
+
+        produto.setId(id);
+
+        Produto produtoAtualizado = produtoService.atualizar(produto);
+        return ResponseEntity.ok(produtoAtualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarProduto(@PathVariable Long id) {
+
+        produtoService.deletar(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
