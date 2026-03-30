@@ -131,26 +131,38 @@ function renderTable(products = allProducts) {
 // Abrir modal
 function openModal(isEdit = false, id = null) {
     const modal = document.getElementById('product-modal');
+    const selectCategoria = document.getElementById('input-categoria');
     modal.style.display = 'flex';
 
     if (isEdit) {
         document.getElementById('modal-title').textContent = "Editar Produto";
-        const p = allProducts.find(prod => prod.id === id);
-        document.getElementById('edit-id').value = p.id;
-        //document.getElementById('input-codigo').value = p.codigo;
-        document.getElementById('input-data').value = p.dataCadastro.split('T')[0];
-        document.getElementById('input-nome').value = p.nome;
-        document.getElementById('input-categoria').value = p.categoria?.idCategoria || "";
-        document.getElementById('input-descricao').value = p.descricao;
-        // Formata o preço para exibição
-        document.getElementById('input-preco').value = p.preco.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        // Formata o estoque com duas casas decimais para exibição
-        document.getElementById('input-estoque').value = String(p.quantidadeEstoque);
-        document.getElementById('input-status').value = p.ativo ? "Ativo" : "Inativo";
+        const p = allProducts.find(prod => prod.id == id);
+        
+        if (p) {
+            document.getElementById('edit-id').value = p.id;
+            document.getElementById('input-nome').value = p.nome;
+            document.getElementById('input-descricao').value = p.descricao;            
+
+            selectCategoria.value = p.categoria?.idCategoria || "";
+            selectCategoria.disabled = true; 
+            selectCategoria.classList.add('bg-gray-100', 'cursor-not-allowed');
+
+            document.getElementById('input-preco').value = p.preco.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            document.getElementById('input-estoque').value = p.quantidadeEstoque.toLocaleString('pt-BR');
+            
+            document.getElementById('input-status').value = p.ativo ? "Ativo" : "Inativo";
+        }
     } else {
         document.getElementById('modal-title').textContent = "Novo Produto";
         document.getElementById('product-form').reset();
         document.getElementById('edit-id').value = '';
+        
+        selectCategoria.disabled = false;
+        selectCategoria.classList.remove('bg-gray-100', 'cursor-not-allowed');
     }
 }
 

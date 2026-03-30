@@ -135,6 +135,21 @@ body {
     background: var(--primary-hover);
 }
 
+.btn-primary-delete {
+    background: #dc2626;
+    color: white;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary-delete:hover {
+    background: #a71e1e;
+}
+
 .btn-outline {
     background: transparent;
     border: 1px solid var(--border-color);
@@ -190,6 +205,11 @@ body {
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
+}
+
+.close-btn {
+    font-size: 1.2rem;
+    cursor: pointer;
 }
 
 .modal-body {
@@ -288,6 +308,13 @@ body {
 .toast.show {
     transform: translateY(0);
     opacity: 1;
+}
+
+select:disabled {
+    background-color: #f1f5f9; /* Um cinza claro */
+    color: #64748b;
+    cursor: not-allowed;
+    border-color: #e2e8f0;
 }
 
 /* Responsividade */
