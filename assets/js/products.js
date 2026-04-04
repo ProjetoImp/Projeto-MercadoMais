@@ -8,6 +8,9 @@ const CATEGORIAS_URL = "https://projeto-mercadomais-production.up.railway.app/ca
 let allProducts = [];
 let categorias = [];
 let idParaExcluir = null;
+let currentPage = 1;
+let currentFiltered = [];
+const ITEMS_PER_PAGE = 10;
 
 // Inicialização da página
 document.addEventListener('DOMContentLoaded', async () => {
@@ -17,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btn-add-product').addEventListener('click', () => openModal(false));
     document.getElementById('search-input').addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase().trim();
-    
+
     const filtered = allProducts.filter(p => {
         const nomeMatch = p.nome ? p.nome.toLowerCase().includes(term) : false;
         const idMatch = p.id ? String(p.id).includes(term) : false;
@@ -25,6 +28,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return nomeMatch || idMatch || categoriaMatch;
     });
 
+    currentPage = 1;
     renderTable(filtered);
 });
 
@@ -87,17 +91,25 @@ async function carregarProdutos() {
 
 // Renderiza tabela
 function renderTable(products = allProducts) {
+    currentFiltered = products;
     const tbody = document.getElementById('products-table-body');
     const emptyState = document.getElementById('empty-state');
 
     tbody.innerHTML = '';
     if (products.length === 0) {
         emptyState.style.display = 'block';
+        renderPagination(0);
         return;
     }
     emptyState.style.display = 'none';
 
-    products.forEach(p => {
+    const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const pageProducts = products.slice(start, start + ITEMS_PER_PAGE);
+
+    pageProducts.forEach(p => {
         const row = document.createElement('tr');
         row.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
         row.innerHTML = `
@@ -126,6 +138,43 @@ function renderTable(products = allProducts) {
         `;
         tbody.appendChild(row);
     });
+
+    renderPagination(products.length);
+}
+
+function renderPagination(total) {
+    const container = document.getElementById('pagination-container');
+    if (!container) return;
+
+    if (total === 0) {
+        container.innerHTML = `
+            <span class="pagination-info">0 produtos</span>
+            <div class="pagination-controls">
+                <button class="page-btn" disabled>&#8592; Anterior</button>
+                <span class="page-indicator">Página 1 de 1</span>
+                <button class="page-btn" disabled>Próxima &#8594;</button>
+            </div>
+        `;
+        return;
+    }
+
+    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+    const end = Math.min(currentPage * ITEMS_PER_PAGE, total);
+
+    container.innerHTML = `
+        <span class="pagination-info">${start}–${end} de ${total} produtos</span>
+        <div class="pagination-controls">
+            <button onclick="changePage(${currentPage - 1})" class="page-btn" ${currentPage === 1 ? 'disabled' : ''}>&#8592; Anterior</button>
+            <span class="page-indicator">Página ${currentPage} de ${totalPages}</span>
+            <button onclick="changePage(${currentPage + 1})" class="page-btn" ${currentPage === totalPages ? 'disabled' : ''}>Próxima &#8594;</button>
+        </div>
+    `;
+}
+
+function changePage(page) {
+    currentPage = page;
+    renderTable(currentFiltered);
 }
 
 // Abrir modal
@@ -257,6 +306,8 @@ async function confirmDelete() {
 }
 
 // Toast
+let toastTimer = null;
+
 function showToast(message) {
     const toast = document.getElementById('toast');
     const toastMessage = document.getElementById('toast-message');
@@ -264,7 +315,13 @@ function showToast(message) {
     toastMessage.textContent = message;
     toast.classList.add('show');
 
-    setTimeout(() => toast.classList.remove('show'), 3000);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function closeToast() {
+    clearTimeout(toastTimer);
+    document.getElementById('toast').classList.remove('show');
 }
 
 // Formatar data

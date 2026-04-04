@@ -310,6 +310,21 @@ body {
     opacity: 1;
 }
 
+.toast-close {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0 0 0.75rem;
+    transition: color 0.2s;
+}
+
+.toast-close:hover {
+    color: white;
+}
+
 select:disabled {
     background-color: #f1f5f9; /* Um cinza claro */
     color: #64748b;
@@ -333,3 +348,53 @@ select:disabled {
 }
 
 .hidden { display: none; }
+
+/* Paginação */
+.pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    margin-top: 0.75rem;
+    background: var(--white);
+    border-radius: 1rem;
+    border: 1px solid var(--border-color);
+}
+
+.pagination-info {
+    font-size: 0.875rem;
+    color: #64748b;
+}
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.page-indicator {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.page-btn {
+    padding: 0.4rem 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: 0.5rem;
+    background: var(--white);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.page-btn:hover:not(:disabled) {
+    background: #e8e8ff;
+    border-color: var(--primary);
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
