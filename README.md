@@ -59,5 +59,5 @@ Clique com o botão direito em src/main/java
 | Arilson Filho   | 2401655        | https://www.linkedin.com/in/arilson-filadelfo/ |
 | Jean Lisboa    | 2401572     |    https://www.linkedin.com/in/jean-lisboa-6372b8212/        |
 | Livia Santos    | 2401571       | https://www.linkedin.com/in/livia-graziele-b84b4a34a             |
-| Roberto Borges    | 12345                | https://      |
+| Roberto Borges    | 2402463     | https://www.linkedin.com/in/roberto-borges-3aa494227   |
 | Thainá Ramos     | 2401916            | https://www.linkedin.com/in/thaina-zerbinatti    |
