@@ -1,18 +1,15 @@
-let allClients = [
-    { id: 1, dataCadastro: "2024-05-01", nome: "Ana Silva", cpf: "123.456.789-00", email: "ana.silva@email.com", telefone: "(11) 98888-7777", dataNascimento: "1990-01-01", ativo: true },
-    { id: 2, dataCadastro: "2024-05-02", nome: "Bruno Oliveira", cpf: "234.567.890-11", email: "bruno.o@email.com", telefone: "(11) 97777-6666", dataNascimento: "1985-05-15", ativo: true }
-];
+const API_URL = "https://projeto-mercadomais-production.up.railway.app/clientes";
 
+let allClients = [];
 let idParaExcluir = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-    renderTable();
+    carregarClientes();
 
-    // Eventos ByID
     document.getElementById('btn-add-product').addEventListener('click', () => openModal(false));
     document.getElementById('product-form').addEventListener('submit', handleFormSubmit);
     document.getElementById('confirm-delete-btn').addEventListener('click', confirmDelete);
-    
+
     // Máscaras
     document.getElementById('cpf').addEventListener('input', e => {
         e.target.value = mascaraCPF(e.target.value);
@@ -25,17 +22,86 @@ document.addEventListener('DOMContentLoaded', () => {
     // Busca em tempo real (Nome ou CPF)
     document.getElementById('search-input').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase().trim();
-        const filtered = allClients.filter(c => 
+        const filtered = allClients.filter(c =>
             c.nome.toLowerCase().includes(term) || c.cpf.includes(term)
         );
         renderTable(filtered);
     });
 });
 
+// --- API ---
+async function carregarClientes() {
+    try {
+        const res = await fetch(API_URL);
+        allClients = await res.json();
+        renderTable();
+    } catch (e) {
+        showToast("❌ Erro ao carregar clientes.");
+    }
+}
+
+async function handleFormSubmit(e) {
+    e.preventDefault();
+
+    const idExistente = document.getElementById('edit-id').value;
+    const cpfValor = document.getElementById('cpf').value;
+
+    if (cpfValor.replace(/\D/g, '').length < 11) {
+        showToast("❌ CPF informado é inválido!");
+        return;
+    }
+
+    const dados = {
+        nome: document.getElementById('nome').value,
+        cpf: cpfValor.replace(/\D/g, ''),
+        email: document.getElementById('email').value,
+        telefone: document.getElementById('telefone').value,
+        dataNascimento: document.getElementById('data-nascimento').value || null,
+        ativo: document.getElementById('input-status').value === "Ativo"
+    };
+
+    try {
+        if (idExistente) {
+            const res = await fetch(`${API_URL}/${idExistente}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+            if (!res.ok) throw new Error();
+            showToast("✅ Cliente atualizado com sucesso!");
+        } else {
+            const res = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dados)
+            });
+            if (!res.ok) throw new Error();
+            showToast("✅ Cliente cadastrado com sucesso!");
+        }
+
+        await carregarClientes();
+        closeModal();
+    } catch (e) {
+        showToast("❌ Erro ao salvar cliente.");
+    }
+}
+
+async function confirmDelete() {
+    try {
+        const res = await fetch(`${API_URL}/${idParaExcluir}`, { method: 'DELETE' });
+        if (!res.ok) throw new Error();
+        showToast("🗑️ Cliente excluído com sucesso!");
+        await carregarClientes();
+    } catch (e) {
+        showToast("❌ Erro ao excluir cliente.");
+    }
+    closeDeleteModal();
+}
+
 // --- FUNÇÕES DE MÁSCARA ---
 function mascaraCPF(valor) {
     return valor
-        .replace(/\D/g, "") 
+        .replace(/\D/g, "")
         .replace(/(\d{3})(\d)/, "$1.$2") // Coloca ponto após os 3 primeiros números
         .replace(/(\d{3})(\d)/, "$1.$2") // Coloca ponto após os 6 primeiros números
         .replace(/(\d{3})(\d{1,2})$/, "$1-$2") // Coloca hífen antes dos 2 últimos
@@ -63,12 +129,12 @@ function openModal(isEdit = false, id = null) {
         if (c) {
             document.getElementById('edit-id').value = c.id;
             document.getElementById('nome').value = c.nome;
-            document.getElementById('cpf').value = c.cpf;
+            document.getElementById('cpf').value = mascaraCPF(c.cpf);
             document.getElementById('email').value = c.email;
             document.getElementById('telefone').value = c.telefone || '';
             document.getElementById('data-nascimento').value = c.dataNascimento || '';
             document.getElementById('input-status').value = c.ativo ? "Ativo" : "Inativo";
-            
+
             // CPF não editável no modo edição
             cpfInput.disabled = true;
             cpfInput.classList.add('bg-slate-100', 'cursor-not-allowed');
@@ -81,63 +147,18 @@ function openModal(isEdit = false, id = null) {
     }
 }
 
-function handleFormSubmit(e) {
-    e.preventDefault();
-    
-    const idExistente = document.getElementById('edit-id').value;
-    const cpfValor = document.getElementById('cpf').value;
-
-    // Validação de formato de CPF (simples: checa tamanho)
-    if (cpfValor.length < 14) {
-        showToast("❌ CPF informado é inválido!");
-        return;
-    }
-
-    // Validação de CPF Duplicado
-    if (!idExistente && allClients.some(c => c.cpf === cpfValor)) {
-        showToast("⚠️ Erro: Este CPF já está cadastrado!"); 
-        return;
-    }
-
-    const dados = {
-        nome: document.getElementById('nome').value,
-        cpf: cpfValor,
-        email: document.getElementById('email').value,
-        telefone: document.getElementById('telefone').value,
-        dataNascimento: document.getElementById('data-nascimento').value,
-        ativo: document.getElementById('input-status').value === "Ativo"
-    };
-
-    if (idExistente) {
-        const index = allClients.findIndex(c => c.id == idExistente);
-        allClients[index] = { ...allClients[index], ...dados };
-        showToast("✅ Cliente atualizado com sucesso!");
-    } else {
-        const novoCliente = {
-            id: allClients.length > 0 ? Math.max(...allClients.map(c => c.id)) + 1 : 1,
-            dataCadastro: new Date().toISOString().split('T')[0],
-            ...dados
-        };
-        allClients.push(novoCliente);
-        showToast("✅ Cliente cadastrado com sucesso!");
-    }
-
-    renderTable();
-    closeModal();
-}
-
 // --- RENDERIZAÇÃO E EXCLUSÃO ---
 function renderTable(clients = allClients) {
     const tbody = document.getElementById('products-table-body');
     const emptyState = document.getElementById('empty-state');
     tbody.innerHTML = '';
-    
+
     if (clients.length === 0) {
         emptyState.classList.remove('hidden');
         emptyState.textContent = "Nenhum cliente encontrado.";
         return;
     }
-    
+
     emptyState.classList.add('hidden');
 
     clients.forEach(c => {
@@ -147,7 +168,7 @@ function renderTable(clients = allClients) {
             <td class="px-6 py-4 font-mono text-sm">${c.id}</td>
             <td class="px-6 py-4 text-sm">${formatarData(c.dataCadastro)}</td>
             <td class="px-6 py-4 font-medium">${c.nome}</td>
-            <td class="px-6 py-4 text-sm">${c.cpf}</td>
+            <td class="px-6 py-4 text-sm">${mascaraCPF(c.cpf)}</td>
             <td class="px-6 py-4 text-sm">${c.email}</td>
             <td class="px-6 py-4 text-sm">${c.telefone || '-'}</td>
             <td class="px-6 py-4">${c.ativo ? "Ativo" : "Inativo"}</td>
@@ -165,12 +186,6 @@ function renderTable(clients = allClients) {
 function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
 function openDeleteModal(id) { idParaExcluir = id; document.getElementById('delete-modal').style.display = 'flex'; }
 function closeDeleteModal() { document.getElementById('delete-modal').style.display = 'none'; }
-function confirmDelete() {
-    allClients = allClients.filter(c => c.id !== idParaExcluir);
-    renderTable();
-    showToast("🗑️ Cliente excluído com sucesso!");
-    closeDeleteModal();
-}
 
 function showToast(message) {
     const toast = document.getElementById('toast');
@@ -180,7 +195,8 @@ function showToast(message) {
 }
 
 function formatarData(dataString) {
-    if (!dataString) return "";
-    const [ano, mes, dia] = dataString.split('-');
-    return `${dia}/${mes}/${ano}`;
+    if (!dataString) return "-";
+    const date = new Date(dataString);
+    if (isNaN(date)) return "-";
+    return date.toLocaleDateString('pt-BR');
 }
