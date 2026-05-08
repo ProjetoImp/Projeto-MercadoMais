@@ -2,6 +2,9 @@ const API_URL = "https://projeto-mercadomais-production.up.railway.app/clientes"
 
 let allClients = [];
 let idParaExcluir = null;
+let currentPage = 1;
+let currentFiltered = [];
+const ITEMS_PER_PAGE = 10;
 
 document.addEventListener('DOMContentLoaded', () => {
     carregarClientes();
@@ -25,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const filtered = allClients.filter(c =>
             c.nome.toLowerCase().includes(term) || c.cpf.includes(term)
         );
+        currentPage = 1;
         renderTable(filtered);
     });
 });
@@ -147,8 +151,9 @@ function openModal(isEdit = false, id = null) {
     }
 }
 
-// --- RENDERIZAÇÃO E EXCLUSÃO ---
+// --- RENDERIZAÇÃO, PAGINAÇÃO E EXCLUSÃO ---
 function renderTable(clients = allClients) {
+    currentFiltered = clients;
     const tbody = document.getElementById('products-table-body');
     const emptyState = document.getElementById('empty-state');
     tbody.innerHTML = '';
@@ -156,12 +161,19 @@ function renderTable(clients = allClients) {
     if (clients.length === 0) {
         emptyState.classList.remove('hidden');
         emptyState.textContent = "Nenhum cliente encontrado.";
+        renderPagination(0);
         return;
     }
 
     emptyState.classList.add('hidden');
 
-    clients.forEach(c => {
+    const totalPages = Math.ceil(clients.length / ITEMS_PER_PAGE);
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const pageClients = clients.slice(start, start + ITEMS_PER_PAGE);
+
+    pageClients.forEach(c => {
         const row = document.createElement('tr');
         row.className = "hover:bg-slate-50 transition-colors border-b border-slate-100";
         row.innerHTML = `
@@ -180,17 +192,65 @@ function renderTable(clients = allClients) {
         `;
         tbody.appendChild(row);
     });
+
+    renderPagination(clients.length);
+}
+
+function renderPagination(total) {
+    const container = document.getElementById('pagination-container');
+    if (!container) return;
+
+    if (total === 0) {
+        container.innerHTML = `
+            <span class="pagination-info">0 clientes</span>
+            <div class="pagination-controls">
+                <button class="page-btn" disabled>&#8592; Anterior</button>
+                <span class="page-indicator">Página 1 de 1</span>
+                <button class="page-btn" disabled>Próxima &#8594;</button>
+            </div>
+        `;
+        return;
+    }
+
+    const totalPages = Math.ceil(total / ITEMS_PER_PAGE);
+    const start = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+    const end = Math.min(currentPage * ITEMS_PER_PAGE, total);
+
+    container.innerHTML = `
+        <span class="pagination-info">${start}–${end} de ${total} clientes</span>
+        <div class="pagination-controls">
+            <button onclick="changePage(${currentPage - 1})" class="page-btn" ${currentPage === 1 ? 'disabled' : ''}>&#8592; Anterior</button>
+            <span class="page-indicator">Página ${currentPage} de ${totalPages}</span>
+            <button onclick="changePage(${currentPage + 1})" class="page-btn" ${currentPage === totalPages ? 'disabled' : ''}>Próxima &#8594;</button>
+        </div>
+    `;
+}
+
+function changePage(page) {
+    currentPage = page;
+    renderTable(currentFiltered);
 }
 
 function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
 function openDeleteModal(id) { idParaExcluir = id; document.getElementById('delete-modal').style.display = 'flex'; }
 function closeDeleteModal() { document.getElementById('delete-modal').style.display = 'none'; }
 
+let toastTimer = null;
+
 function showToast(message) {
     const toast = document.getElementById('toast');
-    document.getElementById('toast-message').textContent = message;
+    const toastMessage = document.getElementById('toast-message');
+
+    toastMessage.textContent = message;
     toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3000);
+
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function closeToast() {
+    clearTimeout(toastTimer);
+    document.getElementById('toast').classList.remove('show');
 }
 
 function formatarData(dataString) {
