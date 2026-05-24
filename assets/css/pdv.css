@@ -1,0 +1,63 @@
+/* Variáveis herdadas do layout padrão do Mercado+ */
+:root {
+    --primary: #1e3a8a;
+    --primary-hover: #1e40af;
+    --bg-body: #f8fafc;
+    --text-main: #1e293b;
+    --border-color: #e2e8f0;
+    --white: #ffffff;
+}
+
+/* Header Estilizado Corporativo */
+.main-header {
+    background: #0b0b55;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Customizações Estilo Cupom Fiscal (Notinha) */
+.cupom-fiscal {
+    background-color: #fffdf5; /* Tom esbranquiçado de papel térmico */
+    font-family: 'Courier New', Courier, monospace; /* Fonte mono clássica de caixa */
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.05);
+}
+
+/* Ocultação limpa de seções */
+.hidden {
+    display: none !important;
+}
+
+/* Customização de Scrollbar para a listagem do carrinho */
+#lista-carrinho::-webkit-scrollbar {
+    width: 6px;
+}
+#lista-carrinho::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 8px;
+}
+#lista-carrinho::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 8px;
+}
+#lista-carrinho::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* Regras de Impressão */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .cupom-fiscal, .cupom-fiscal * {
+        visibility: visible;
+    }
+    .cupom-fiscal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none;
+        border: none;
+        background: white;
+    }
+}
