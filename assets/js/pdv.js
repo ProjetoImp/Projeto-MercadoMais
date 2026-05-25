@@ -78,7 +78,7 @@ function renderizarVitrine(produtos) {
         "Perfumaria": "🧼",
         "Higiene": "🧺",
         "Hortifruti": "🍉",
-        "Variados": "🍞"
+        "Variados": "🧹"
     };
 
     produtos.forEach(p => {
