@@ -20,7 +20,7 @@ public class ItemVenda {
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
-    @Column(name = "nome_produto", nullable = false)
+    @Column(name = "nome_produto")
     private String nomeProduto;
 
     @Column(nullable = false)
