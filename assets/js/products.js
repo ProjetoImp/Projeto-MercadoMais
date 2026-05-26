@@ -12,6 +12,14 @@ let currentPage = 1;
 let currentFiltered = [];
 const ITEMS_PER_PAGE = 10;
 
+// Normaliza texto removendo acentos e diferenças de caixa (para busca tolerante)
+const normalizarTexto = (s) => (s ?? '')
+    .toString()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim();
+
 // Inicialização da página
 document.addEventListener('DOMContentLoaded', async () => {
     await carregarCategorias();
@@ -19,12 +27,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     document.getElementById('btn-add-product').addEventListener('click', () => openModal(false));
     document.getElementById('search-input').addEventListener('input', (e) => {
-    const term = e.target.value.toLowerCase().trim();
+    const term = normalizarTexto(e.target.value);
 
     const filtered = allProducts.filter(p => {
-        const nomeMatch = p.nome ? p.nome.toLowerCase().includes(term) : false;
+        const nomeMatch = p.nome ? normalizarTexto(p.nome).includes(term) : false;
         const idMatch = p.id ? String(p.id).includes(term) : false;
-        const categoriaMatch = p.categoria?.nome ? p.categoria.nome.toLowerCase().includes(term) : false;
+        const categoriaMatch = p.categoria?.nome ? normalizarTexto(p.categoria.nome).includes(term) : false;
         return nomeMatch || idMatch || categoriaMatch;
     });
 

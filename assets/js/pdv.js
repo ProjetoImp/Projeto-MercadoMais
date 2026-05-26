@@ -2,6 +2,15 @@
 const PRODUTOS_URL = "https://projeto-mercadomais-production.up.railway.app/produtos";
 const CATEGORIAS_URL = "https://projeto-mercadomais-production.up.railway.app/categorias";
 const CLIENTES_URL = "https://projeto-mercadomais-production.up.railway.app/clientes";
+const VENDAS_URL = "https://projeto-mercadomais-production.up.railway.app/vendas";
+
+// Normaliza texto removendo acentos e diferenças de caixa (para busca tolerante)
+const normalizarTexto = (s) => (s ?? '')
+    .toString()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim();
 
 // Estados da Aplicação
 let bancoProdutos = [];
@@ -95,9 +104,7 @@ function renderizarVitrine(produtos) {
         const nomeCategoria = p.categoria?.nome || 'Geral';
         const emojiCategoria = mapeamentoEmojis[nomeCategoria] || "📦";
 
-        //ATENÇÃO
-        // ALTERAR ESSA PARTE PARA ESTOQUE <= 0, QUANDO CRIAR O FETCH NO BACKEND
-        const estaEsgotado = estoqueDisponivel <= 1;
+        const estaEsgotado = estoqueDisponivel <= 0;
 
         const card = document.createElement('div');
         card.className = `bg-white rounded-2xl p-5 border shadow-sm flex flex-col justify-between transition-all ${estaEsgotado ? 'opacity-60 border-slate-200' : 'border-slate-100 hover:shadow-md'}`;
@@ -135,11 +142,11 @@ function renderizarVitrine(produtos) {
 
 // Filtro Combinado de Caixa de Busca + Dropdown Categoria
 function filtrarVitrine() {
-    const termoBusca = document.getElementById('search-input').value.toLowerCase().trim();
+    const termoBusca = normalizarTexto(document.getElementById('search-input').value);
     const categoriaSelecionada = document.getElementById('filter-categoria').value;
 
     const produtosFiltrados = bancoProdutos.filter(p => {
-        const bateNome = p.nome.toLowerCase().includes(termoBusca) || String(p.id).includes(termoBusca);
+        const bateNome = normalizarTexto(p.nome).includes(termoBusca) || String(p.id).includes(termoBusca);
         const bateCategoria = categoriaSelecionada === "" || (p.categoria && p.categoria.nome === categoriaSelecionada);
         return bateNome && bateCategoria;
     });
@@ -303,12 +310,55 @@ function mudarTela(destino) {
     }
 }
 
-// Finaliza a transação montando o Cupom Fiscal / Notinha
-function finalizarCompra() {
+// Finaliza a transação: persiste no backend e monta o Cupom Fiscal / Notinha
+async function finalizarCompra() {
     if (carrinho.length === 0) return;
 
-    const agora = new Date();
-    document.getElementById('notinha-data').textContent = agora.toLocaleString('pt-BR');
+    const btnFinalizar = document.getElementById('btn-finalizar');
+    btnFinalizar.disabled = true;
+    btnFinalizar.classList.add('opacity-50', 'cursor-not-allowed');
+
+    const payload = {
+        cpfCliente: clienteIdentificado
+            ? document.getElementById('cpf-cliente').value.replace(/\D/g, '')
+            : null,
+        itens: carrinho.map(item => ({
+            idProduto: item.id,
+            quantidade: item.quantidade
+        }))
+    };
+
+    try {
+        const resp = await fetch(VENDAS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) {
+            let msg = `Falha ao registrar venda (HTTP ${resp.status}).`;
+            try {
+                const erroBody = await resp.json();
+                if (erroBody?.message) msg = erroBody.message;
+            } catch (_) { /* corpo não-JSON */ }
+            mostrarToast(`❌ ${msg}`);
+            btnFinalizar.disabled = false;
+            btnFinalizar.classList.remove('opacity-50', 'cursor-not-allowed');
+            return;
+        }
+
+        const vendaSalva = await resp.json();
+        document.getElementById('notinha-data').textContent =
+            vendaSalva?.dataVenda
+                ? new Date(vendaSalva.dataVenda).toLocaleString('pt-BR')
+                : new Date().toLocaleString('pt-BR');
+    } catch (err) {
+        console.error("Erro ao finalizar venda:", err);
+        mostrarToast("❌ Erro de comunicação com o servidor. Venda NÃO registrada.");
+        btnFinalizar.disabled = false;
+        btnFinalizar.classList.remove('opacity-50', 'cursor-not-allowed');
+        return;
+    }
 
     const targetNome = document.getElementById('notinha-cliente');
     const targetCpfRow = document.getElementById('notinha-cpf-row');

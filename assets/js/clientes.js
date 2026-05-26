@@ -6,6 +6,14 @@ let currentPage = 1;
 let currentFiltered = [];
 const ITEMS_PER_PAGE = 10;
 
+// Normaliza texto removendo acentos e diferenças de caixa (para busca tolerante)
+const normalizarTexto = (s) => (s ?? '')
+    .toString()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim();
+
 document.addEventListener('DOMContentLoaded', () => {
     carregarClientes();
 
@@ -24,9 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Busca em tempo real (Nome ou CPF)
     document.getElementById('search-input').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase().trim();
+        const term = normalizarTexto(e.target.value);
+        const cpfDigits = e.target.value.replace(/\D/g, '');
         const filtered = allClients.filter(c =>
-            c.nome.toLowerCase().includes(term) || c.cpf.includes(term)
+            normalizarTexto(c.nome).includes(term) ||
+            (cpfDigits && c.cpf && c.cpf.includes(cpfDigits))
         );
         currentPage = 1;
         renderTable(filtered);
