@@ -40,6 +40,16 @@ public class VendaService {
             Produto produto = produtoRepository.findById(itemDto.getIdProduto())
                     .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto ID " + itemDto.getIdProduto() + " não encontrado."));
 
+            if (Boolean.FALSE.equals(produto.getAtivo())) {
+                throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
+                        "Produto indisponível para venda: " + produto.getNome());
+            }
+
+            if (itemDto.getQuantidade() == null || itemDto.getQuantidade() <= 0) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                        "Quantidade inválida para o produto: " + produto.getNome());
+            }
+
             if (produto.getQuantidadeEstoque() < itemDto.getQuantidade()) {
                 throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
                         "Estoque insuficiente para o produto: " + produto.getNome() + ". Disponível: " + produto.getQuantidadeEstoque());
@@ -47,6 +57,7 @@ public class VendaService {
 
             ItemVenda itemVenda = new ItemVenda();
             itemVenda.setProduto(produto);
+            itemVenda.setNomeProduto(produto.getNome());
             itemVenda.setQuantidade(itemDto.getQuantidade());
             itemVenda.setPrecoUnitario(produto.getPreco());
             itemVenda.setSubtotal(produto.getPreco() * itemDto.getQuantidade());
@@ -83,7 +94,11 @@ public class VendaService {
 
         dto.setItens(venda.getItens().stream().map(item -> {
             ItemVendaResponseDTO itemDto = new ItemVendaResponseDTO();
-            itemDto.setNomeProduto(item.getProduto().getNome());
+            itemDto.setNomeProduto(
+                    item.getNomeProduto() != null
+                            ? item.getNomeProduto()
+                            : item.getProduto().getNome()
+            );
             itemDto.setQuantidade(item.getQuantidade());
             itemDto.setPrecoUnitario(item.getPrecoUnitario());
             itemDto.setSubtotal(item.getSubtotal());

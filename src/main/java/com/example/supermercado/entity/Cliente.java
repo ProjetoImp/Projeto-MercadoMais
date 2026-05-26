@@ -28,6 +28,13 @@ public class Cliente {
 
     private Boolean ativo;
 
+    @PrePersist
+    public void prePersist() {
+        if (this.ativo == null) {
+            this.ativo = true;
+        }
+    }
+
     public Cliente() {}
 
     public Cliente(String nome, String cpf, String email, String telefone, LocalDate dataNascimento, Boolean ativo) {

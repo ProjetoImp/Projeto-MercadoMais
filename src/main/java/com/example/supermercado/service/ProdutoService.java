@@ -5,7 +5,9 @@ import com.example.supermercado.entity.Produto;
 import com.example.supermercado.exceptions.RecursoNaoEncontradoException;
 import com.example.supermercado.repository.CategoriaRepository;
 import com.example.supermercado.repository.ProdutoRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -24,17 +26,7 @@ public class ProdutoService {
 
     public Produto salvar(Produto produto) {
 
-        if (produto.getNome().isBlank()) {
-            throw new RecursoNaoEncontradoException("O produto não pode ter um nome em branco.");
-        }
-
-        if (produto.getQuantidadeEstoque() <= 0) {
-            throw new RecursoNaoEncontradoException("A quantidade não pode ser menor que 0");
-        }
-
-        if (!(produto.getPreco() > 0)) {
-            throw new RecursoNaoEncontradoException("O preço deve ser maior que 0.");
-        }
+        validarProduto(produto);
 
         Categoria categoria = categoriaRepository
                 .findById(produto.getCategoria().getIdCategoria())
@@ -53,28 +45,40 @@ public class ProdutoService {
 
         Produto produtoExistente = buscarPorId(produto.getId());
 
-        if (produto.getNome().isBlank()) {
-            throw new RecursoNaoEncontradoException("O produto não pode ter um nome em branco.");
-        }
-
-        if (produto.getQuantidadeEstoque() <= 0) {
-            throw new RecursoNaoEncontradoException("A quantidade não pode ser menor que 0");
-        }
-
-        if (!(produto.getPreco() > 0)) {
-            throw new RecursoNaoEncontradoException("O preço deve ser maior que 0.");
-        }
+        validarProduto(produto);
 
         Categoria categoria = categoriaRepository
                 .findById(produto.getCategoria().getIdCategoria())
                 .orElseThrow(() -> new RecursoNaoEncontradoException("Categoria não encontrada"));
 
         produtoExistente.setNome(produto.getNome());
+        produtoExistente.setDescricao(produto.getDescricao());
         produtoExistente.setQuantidadeEstoque(produto.getQuantidadeEstoque());
         produtoExistente.setPreco(produto.getPreco());
         produtoExistente.setCategoria(categoria);
+        if (produto.getAtivo() != null) {
+            produtoExistente.setAtivo(produto.getAtivo());
+        }
 
         return produtoRepository.save(produtoExistente);
+    }
+
+    private void validarProduto(Produto produto) {
+        if (produto.getNome() == null || produto.getNome().isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O produto não pode ter um nome em branco.");
+        }
+
+        if (produto.getQuantidadeEstoque() == null || produto.getQuantidadeEstoque() < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A quantidade em estoque não pode ser negativa.");
+        }
+
+        if (produto.getPreco() == null || produto.getPreco() <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "O preço deve ser maior que 0.");
+        }
+
+        if (produto.getCategoria() == null || produto.getCategoria().getIdCategoria() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A categoria do produto é obrigatória.");
+        }
     }
 
     public void deletar(Long id) {

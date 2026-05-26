@@ -34,6 +34,9 @@ public class Produto {
     @PrePersist
     public void prePersist() {
         this.dataCadastro = LocalDateTime.now();
+        if (this.ativo == null) {
+            this.ativo = true;
+        }
     }
 
     public Produto() {}

@@ -20,6 +20,9 @@ public class ItemVenda {
     @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
+    @Column(name = "nome_produto", nullable = false)
+    private String nomeProduto;
+
     @Column(nullable = false)
     private Integer quantidade;
 
@@ -35,6 +38,8 @@ public class ItemVenda {
     public void setVenda(Venda venda) { this.venda = venda; }
     public Produto getProduto() { return produto; }
     public void setProduto(Produto produto) { this.produto = produto; }
+    public String getNomeProduto() { return nomeProduto; }
+    public void setNomeProduto(String nomeProduto) { this.nomeProduto = nomeProduto; }
     public Integer getQuantidade() { return quantidade; }
     public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
     public Double getPrecoUnitario() { return precoUnitario; }
