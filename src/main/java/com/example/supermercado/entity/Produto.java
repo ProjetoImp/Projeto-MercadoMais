@@ -13,18 +13,21 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
 
     private String descricao;
 
+    @Column(nullable = false)
     private Double preco;
 
-    @Column(name = "quantidade_estoque")
+    @Column(name = "quantidade_estoque", nullable = false)
     private Integer quantidadeEstoque;
 
-    @Column(name = "data_cadastro")
+    @Column(name = "data_cadastro", nullable = false)
     private LocalDateTime dataCadastro;
 
+    @Column(nullable = false)
     private Boolean ativo;
 
     @ManyToOne

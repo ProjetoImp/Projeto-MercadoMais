@@ -12,6 +12,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     @NotBlank(message = "O nome é obrigatório")
     private String nome;
 
@@ -26,6 +27,7 @@ public class Cliente {
     @Column(name = "data_nascimento")
     private LocalDate dataNascimento;
 
+    @Column(nullable = false)
     private Boolean ativo;
 
     @PrePersist
