@@ -13,12 +13,12 @@ O acompanhamento das tarefas e evolução do projeto foi realizado através do J
 - **Backend:**   <img align="center" alt="Jean-JAVA" height="30" width="40" src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg">  <img align="center" alt="Jean-JAVA" height="30" width="40" src="https://github.com/devicons/devicon/blob/master/icons/maven/maven-original.svg">
 - **Banco de Dados:** <img align="center" alt="Jean-JAVA" height="30" width="40" src="https://github.com/devicons/devicon/blob/master/icons/mysql/mysql-original.svg">
 
-### Diagramas Utilizados
+## Diagramas Utilizados
 
-## Diagrama de Caso de Uso
+### Diagrama de Caso de Uso
 <img width="1536" height="1024" alt="diagrama_uso" src="https://github.com/user-attachments/assets/168d123d-acb4-4d5f-878a-e38f773831ac" />
 
-## Diagrama de Classe
+### Diagrama de Classe
 <img width="1536" height="1024" alt="diagrama_classes" src="https://github.com/user-attachments/assets/4b58e266-42e2-4f03-b677-6a8e201660b2" />
 
 ## Guia de Configuração e Execução da Aplicação
